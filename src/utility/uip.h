@@ -975,6 +975,32 @@ struct uip_udp_conn *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport);
                   } while(0)
 
 /**
+ * Check whether IP address is broadast address.
+ *
+ * Returns true if boradcast
+ *
+ * Example:
+ \code
+ uip_ipaddr_t ipaddr, netmask;
+
+ uip_ipaddr(&ipaddr, 192,16,1,255);
+ uip_ipaddr(&netmask, 255,255,255,0);
+ uip_ipaddr_chk_brdcst(&ipaddr, &netmask);
+ \endcode
+ *
+ * In the example above, the result will be true.
+ *
+ * \param src The IP address.
+ * \param mask The netmask.
+ *
+ * \hideinitializer
+ */
+#define uip_ipaddr_chk_brdcst(src, mask) (\
+                     (((u16_t *)src)[0] | ((u16_t *)mask)[0] == 0xFFFF) && \
+                     (((u16_t *)src)[1] | ((u16_t *)mask)[1] == 0xFFFF) \
+                  )
+
+/**
  * Pick the first octet of an IP address.
  *
  * Picks out the first octet of an IP address.

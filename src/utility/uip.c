@@ -909,7 +909,7 @@ uip_process(u8_t flag)
 #if UIP_BROADCAST
     DEBUG_PRINTF("UDP IP checksum 0x%04x\n", uip_ipchksum());
     if(BUF->proto == UIP_PROTO_UDP &&
-       uip_ipaddr_cmp(BUF->destipaddr, all_ones_addr)
+       uip_ipaddr_chk_brdcst(BUF->destipaddr, uip_netmask)
        /*&&
 	 uip_ipchksum() == 0xffff*/) {
       goto udp_input;
