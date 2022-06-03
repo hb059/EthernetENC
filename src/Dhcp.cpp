@@ -134,7 +134,7 @@ void DhcpClass::presend_DHCP()
 
 void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 {
-    uint8_t buffer[32];
+    uint8_t buffer[34];
     memset(buffer, 0, 32);
     IPAddress dest_addr( 255, 255, 255, 255 ); // Broadcast address
 
@@ -213,13 +213,13 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
         printByte((char*)&(buffer[26]), _dhcpMacAddr[4]);
         printByte((char*)&(buffer[28]), _dhcpMacAddr[5]);
     } else {
-        size_t len = (strlen(_hostname) <= 14) ? strlen(_hostname) : 14;
+        size_t len = (strlen(_hostname) <= 16) ? strlen(_hostname) : 16;
         buffer[17] = len;
         strncpy((char*)&(buffer[18]), _hostname, len);
     }
 
     //put data in W5100 transmit buffer
-    _dhcpUdpSocket.write(buffer, 30);
+    _dhcpUdpSocket.write(buffer, 18 + buffer[17]);
 
     if(messageType == DHCP_REQUEST)
     {
