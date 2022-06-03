@@ -1,4 +1,10 @@
-<a href="https://www.buymeacoffee.com/jurajandraY" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+This is a fork based on EtherentEnc from JAndrassy
+
+Modifications:
+* Enabled receiving of UDP braodcasts
+* Modified begin() to add a hostname used for DHCP
+
+## Original notes by Juraj Andrassy
 
 EthernetENC is the Ethernet library for ENC28J60. It is a modern version of [the UIPEthernet library](https://github.com/jandrassy/EthernetENC/wiki/UIPEthernet).
 
