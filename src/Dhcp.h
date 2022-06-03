@@ -180,7 +180,7 @@ public:
   IPAddress getDhcpServerIp();
   IPAddress getDnsServerIp();
   
-  int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000, const char *hostname);
+  int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000, const char *hostname = NULL);
   int checkLease();
 };
 
