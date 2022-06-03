@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include "utility/util.h"
 
-int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
+int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout, const char *hostname)
 {
     _dhcpLeaseTime=0;
     _dhcpT1=0;
@@ -13,6 +13,7 @@ int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long 
     _lastCheck=0;
     _timeout = timeout;
     _responseTimeout = responseTimeout;
+    _hostname = hostname;
 
     // zero out _dhcpMacAddr
     memset(_dhcpMacAddr, 0, 6); 
@@ -204,12 +205,18 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 
     // OPT - host name
     buffer[16] = hostName;
-    buffer[17] = strlen(HOST_NAME) + 6; // length of hostname + last 3 bytes of mac address
-    strcpy((char*)&(buffer[18]), HOST_NAME);
+    if (_hostname == 0) {
+        buffer[17] = strlen(HOST_NAME) + 6; // length of hostname + last 3 bytes of mac address
+        strcpy((char*)&(buffer[18]), HOST_NAME);
 
-    printByte((char*)&(buffer[24]), _dhcpMacAddr[3]);
-    printByte((char*)&(buffer[26]), _dhcpMacAddr[4]);
-    printByte((char*)&(buffer[28]), _dhcpMacAddr[5]);
+        printByte((char*)&(buffer[24]), _dhcpMacAddr[3]);
+        printByte((char*)&(buffer[26]), _dhcpMacAddr[4]);
+        printByte((char*)&(buffer[28]), _dhcpMacAddr[5]);
+    } else {
+        size_t len = (strlen(_hostname) <= 14) ? strlen(_hostname) : 14;
+        buffer[17] = len;
+        strncpy((char*)&(buffer[18]), _hostname, len);
+    }
 
     //put data in W5100 transmit buffer
     _dhcpUdpSocket.write(buffer, 30);

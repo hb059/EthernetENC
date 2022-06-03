@@ -55,7 +55,7 @@ void UIPEthernetClass::init(uint8_t csPin)
 
 #if UIP_UDP
 int
-UIPEthernetClass::begin(const uint8_t* mac, unsigned long timeout, unsigned long responseTimeout)
+UIPEthernetClass::begin(const uint8_t* mac, unsigned long timeout, unsigned long responseTimeout, const char *hostname)
 {
   static DhcpClass s_dhcp;
   _dhcp = &s_dhcp;
@@ -64,7 +64,7 @@ UIPEthernetClass::begin(const uint8_t* mac, unsigned long timeout, unsigned long
   init(mac);
 
   // Now try to get our config info from a DHCP server
-  int ret = _dhcp->beginWithDHCP((uint8_t*)mac, timeout, responseTimeout);
+  int ret = _dhcp->beginWithDHCP((uint8_t*)mac, timeout, responseTimeout, hostname);
   if(ret == 1)
   {
     // We've successfully found a DHCP server and got our configuration info, so set things

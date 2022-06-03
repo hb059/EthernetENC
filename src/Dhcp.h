@@ -163,6 +163,7 @@ private:
   unsigned long _responseTimeout;
   unsigned long _secTimeout;
   uint8_t _dhcp_state;
+	char *_hostname;
   EthernetUDP _dhcpUdpSocket;
   
   int request_DHCP_lease();
