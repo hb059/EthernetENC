@@ -13,7 +13,7 @@ int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long 
     _lastCheck=0;
     _timeout = timeout;
     _responseTimeout = responseTimeout;
-    _hostname = hostname;
+    _hostname = (char *)hostname;
 
     // zero out _dhcpMacAddr
     memset(_dhcpMacAddr, 0, 6); 
