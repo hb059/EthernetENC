@@ -131,7 +131,7 @@ bool Enc28J60Network::init(uint8_t* macaddr)
   // enable packet reception
   writeOp(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_RXEN);
   //Configure leds
-  phyWrite(PHLCON,0x476);
+  phyWrite(PHLCON,0x742);
 
   SPI.endTransaction();
 
