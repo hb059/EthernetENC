@@ -87,14 +87,14 @@ typedef unsigned short uip_stats_t;
  *
  * \hideinitializer
  */
-#define UIP_CONF_MAX_LISTENPORTS 4
+#define UIP_CONF_MAX_LISTENPORTS 20
 
 /**
  * uIP buffer size.
  *
  * \hideinitializer
  */
-#define UIP_CONF_BUFFER_SIZE     98
+#define UIP_CONF_BUFFER_SIZE     1400
 //#define UIP_CONF_BUFFER_SIZE     118
 
 /**

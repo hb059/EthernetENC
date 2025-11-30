@@ -172,6 +172,8 @@ u16_t uip_listenports[UIP_LISTENPORTS];
 #if UIP_UDP
 struct uip_udp_conn *uip_udp_conn;
 struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
+uip_ip4addr_t  error_ip;        /**< Port not reachable. */
+u16_t error_port;        /**< Port not reachable. */
 #endif /* UIP_UDP */
 
 static u16_t ipid;           /* Ths ipid variable is an increasing
@@ -209,6 +211,7 @@ static u16_t tmp16;
 #define TCP_OPT_MSS_LEN 4   /* Length of TCP MSS option. */
 
 #define ICMP_ECHO_REPLY 0
+#define ICMP_DEST_UNREACHABLE 3
 #define ICMP_ECHO       8
 
 #define ICMP6_ECHO_REPLY             129
@@ -401,6 +404,21 @@ uip_init(void)
 #endif /* UIP_FIXEDADDR */
 
 }
+
+uip_ip4addr_t *uip_get_error_ip() {
+  return error_ip;
+}
+
+u16_t uip_get_error_port() {
+  return error_port;
+}
+
+void uip_clear_error() {
+  error_ip[0] = 0;
+  error_ip[1] = 0;
+  error_port = 0;
+}
+
 /*---------------------------------------------------------------------------*/
 #if UIP_ACTIVE_OPEN
 struct uip_conn *
@@ -972,6 +990,13 @@ uip_process(u8_t flag)
  icmp_input:
 #endif /* UIP_PINGADDRCONF */
   UIP_STAT(++uip_stat.icmp.recv);
+
+  if (ICMPBUF->type == ICMP_DEST_UNREACHABLE && ICMPBUF->icode == 0x03) {
+    error_ip[0] = BUF->srcipaddr[0];
+    error_ip[1] = BUF->srcipaddr[1];
+    error_port =  ntohs(ICMPBUF->dest_port);
+    goto drop;
+  }
 
   /* ICMP echo (i.e., ping) processing. This is simple, we only change
      the ICMP type from ECHO to ECHO_REPLY and adjust the ICMP

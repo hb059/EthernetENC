@@ -338,6 +338,10 @@ void uip_setipid(u16_t id);
                                  uip_process(UIP_POLL_REQUEST); } while (0)
 
 
+uip_ip4addr_t *uip_get_error_ip();
+u16_t uip_get_error_port();
+void uip_clear_error();
+
 #if UIP_UDP
 /**
  * Periodic processing for a UDP connection identified by its number.
@@ -1474,6 +1478,8 @@ struct uip_icmpip_hdr {
   u16_t icmpchksum;
 #if !UIP_CONF_IPV6
   u16_t id, seqno;
+  u8_t ip_hdr[20];
+  u16_t source_port, dest_port;
 #else /* !UIP_CONF_IPV6 */
   u8_t flags, reserved1, reserved2, reserved3;
   u8_t icmp6data[16];
