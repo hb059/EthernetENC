@@ -97,6 +97,7 @@ public:
   IPAddress subnetMask();
   IPAddress gatewayIP();
   IPAddress dnsServerIP();
+  bool getError(IPAddress &ip, uint16_t &port);
 
 private:
   static bool initialized;

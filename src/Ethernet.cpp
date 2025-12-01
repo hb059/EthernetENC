@@ -130,6 +130,19 @@ int UIPEthernetClass::maintain(){
   return rc;
 }
 
+bool UIPEthernetClass::getError(IPAddress &ip, uint16_t &port)
+{
+  uip_ip4addr_t *error_ip = uip_get_error_ip();
+  uint16_t error_port = uip_get_error_port();
+  if (error_ip[0] != 0 && error_ip[1] != 0) {
+    ip = IPAddress((uint8_t *) error_ip);
+    port = error_port;
+    uip_clear_error();
+    return true;
+  }
+  return false;
+}
+
 EthernetLinkStatus UIPEthernetClass::linkStatus()
 {
   if (!Enc28J60Network::getrev())
